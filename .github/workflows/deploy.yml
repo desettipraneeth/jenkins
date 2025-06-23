@@ -43,6 +43,9 @@ jobs:
              DOCKER_REPO=${{ env.DOCKER_REPO }}
              IMAGE_TAG=${{ env.IMAGE_TAG }}
              DOCKER_USERNAME=${{ env.DOCKER_USERNAME }}
+             DOCKER_PASSWORD=${{ env.DOCKER_PASSWORD }}
+
+             echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
              docker pull ${DOCKER_USERNAME}/$DOCKER_REPO}:${IMAGE_TAG}
              docker stop react-app || true
