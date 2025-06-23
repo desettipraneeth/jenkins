@@ -10,6 +10,7 @@ jobs:
 
     env:
       IMAGE_NAME: my-react-app
+      DOCKER_REPO: moltresinnovations
       AWS_EC2_HOST: ${{ secrets.AWS_EC2_HOST }}
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
@@ -29,7 +30,7 @@ jobs:
       run: |
         TAG=$(date +%Y%m%d%H%M%S)
         docker build -t ${DOCKER_USERNAME}/${IMAGE_NAME}:${TAG} .
-        docker push ${DOCKER_USERNAME}/${IMAGE_NAME}:${TAG}
+        docker push ${DOCKER_USERNAME}/${DOCKER_REPO}:${TAG}
         echo "IMAGE_TAG=${TAG}" >> $GITHUB_ENV
 
     - name: Deploy on EC2
