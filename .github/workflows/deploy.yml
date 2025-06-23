@@ -40,11 +40,11 @@ jobs:
           username: ubuntu
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-             IMAGE_NAME=${{ env.IMAGE_NAME }}
+             DOCKER_REPO=${{ env.DOCKER_REPO }}
              IMAGE_TAG=${{ env.IMAGE_TAG }}
              DOCKER_USERNAME=${{ env.DOCKER_USERNAME }}
 
-             docker pull ${DOCKER_USERNAME}/$IMAGE_NAME}:${IMAGE_TAG}
+             docker pull ${DOCKER_USERNAME}/$DOCKER_REPO}:${IMAGE_TAG}
              docker stop react-app || true
              docker rm react-app || true
-             docker run -d --name react-app -p 81:80 ${DOCKER_USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}
+             docker run -d --name react-app -p 81:80 ${DOCKER_USERNAME}/${DOCKER_REPO}:${IMAGE_TAG}
