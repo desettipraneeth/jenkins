@@ -30,7 +30,7 @@ jobs:
         run: |
           TAG=$(date +%Y%m%d%H%M%S)
           docker build -t ${DOCKER_USERNAME}/${DOCKER_REPO}:${TAG} my-react-app
-          docker push ${DOCKER_USERNAME}/${IMAGE_NAME}:${TAG}
+          docker push ${DOCKER_USERNAME}/${DOCKER_REPO}:${TAG}
           echo "IMAGE_TAG=${TAG}" >> $GITHUB_ENV
 
       - name: Deploy on EC2
