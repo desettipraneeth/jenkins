@@ -34,21 +34,30 @@ jobs:
         id: version
         run: |
           if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
-            # Manual tag pushed, use it
+            # Use manually pushed tag
             VERSION=${GITHUB_REF#refs/tags/}
           else
-            # Auto-increment patch version
+            # Auto-increment based on the latest tag
+            git fetch --tags
             LATEST_TAG=$(git tag -l "v*" --sort=-v:refname | head -n 1)
+
             if [[ -z "$LATEST_TAG" ]]; then
               VERSION="v1.1.1"
             else
-              MAJOR=$(echo $LATEST_TAG | cut -d. -f1 | sed 's/v//')
-              MINOR=$(echo $LATEST_TAG | cut -d. -f2)
-              PATCH=$(echo $LATEST_TAG | cut -d. -f3)
+              MAJOR=$(echo "$LATEST_TAG" | cut -d. -f1 | sed 's/v//')
+              MINOR=$(echo "$LATEST_TAG" | cut -d. -f2)
+              PATCH=$(echo "$LATEST_TAG" | cut -d. -f3)
               NEXT_PATCH=$((PATCH + 1))
               VERSION="v${MAJOR}.${MINOR}.${NEXT_PATCH}"
             fi
+
+            # Create the tag in the repo (optional, if you want to persist it)
+            git config user.name "github-actions"
+            git config user.email "github-actions@github.com"
+            git tag "$VERSION"
+            git push origin "$VERSION"
           fi
+
           echo "IMAGE_TAG=$VERSION" >> $GITHUB_ENV
           echo "Using Docker Tag: $VERSION"
 
